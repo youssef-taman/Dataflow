@@ -10,7 +10,6 @@ TPCH data generator (dbgen) available in ./tpch-dbgen
 
 Your current directory structure should look like:
 
-.
 ├── tpch-dbgen/         # DBGEN source code
 ├── data/               # cleaned .tbl files (after running generate_data.sh)
 ├── dss.sql             # TPCH schema file
