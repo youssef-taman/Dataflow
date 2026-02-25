@@ -6,17 +6,8 @@ Prerequisites
 
 Docker installed
 
-TPCH data generator (dbgen) available in ./tpch-dbgen
+Steps
 
-Your current directory structure should look like:
-
-├── tpch-dbgen/         # DBGEN source code
-├── data/               # cleaned .tbl files (after running generate_data.sh)
-├── dss.sql             # TPCH schema file
-├── load.sh             # Loader script for MySQL
-├── Dockerfile
-├── generate_data.sh    # Script to generate & clean .tbl files
-└── README.md
 Step 1: Generate TPCH data (if not done before)
 
 Run the script to generate the .tbl files:
@@ -39,10 +30,9 @@ Step 2: Build the Docker image
 After generating the data, build the Docker image:
 
 docker build -t tpch-mysql .
+
 Step 3: Run the container
-docker run -d -p 3306:3306 --name tpch \
-  -e MYSQL_ROOT_PASSWORD=root \
-  tpch-mysql
+docker run -d -p 3306:3306 --name tpch tpch-mysql
 
 Username: root
 
