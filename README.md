@@ -1,10 +1,10 @@
-# TPCH MySQL Docker Setup
+# TPCH MySQL Docker Compose Setup
 
-This project sets up a MySQL database preloaded with TPCH benchmark data using Docker.
+This project sets up a MySQL database preloaded with TPCH benchmark data using Docker Compose.
 
 ## Prerequisites
 
-- Docker installed on your machine
+- Docker and Docker Compose installed on your machine
 
 ## Setup Instructions
 
@@ -24,26 +24,24 @@ This script will:
 
 > **Note:** This step only needs to be done once. The `.tbl` files will be used when building the Docker image.
 
-### Step 2: Build the Docker Image
+### Step 2: Start Services with Docker Compose
 
 ```bash
-docker build -t tpch-mysql .
+docker-compose up -d
 ```
 
-### Step 3: Run the Docker Container
-
-```bash
-docker run -d -p 3306:3306 --name tpch tpch-mysql
-```
+This will build and start the MySQL service defined in your `docker-compose.yml` file.
 
 **Connection Details:**
 - Username: `root`
 - Password: `root`
 - Database: `tpch`
+- Host: `localhost` or service name in compose file
+- Port: `3306`
 
 The MySQL server will automatically create the database, tables, and load the TPCH data.
 
-### Step 4: Connect to MySQL
+### Step 3: Connect to MySQL
 
 ```bash
 mysql -h 127.0.0.1 -P 3306 -u root -p
@@ -51,7 +49,7 @@ mysql -h 127.0.0.1 -P 3306 -u root -p
 
 Enter `root` as the password when prompted.
 
-### Step 5: Verify the Data
+### Step 4: Verify the Data
 
 ```sql
 USE tpch;
@@ -59,6 +57,13 @@ SHOW TABLES;
 SELECT COUNT(*) FROM customer;
 ```
 
+### Step 5: Stop Services
+
+```bash
+docker-compose down
+```
+
 ## License
 
 This project is licensed under the MIT License.
+
