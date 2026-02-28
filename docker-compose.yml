@@ -1,0 +1,35 @@
+  version: '3.8'
+
+  services:
+    mysql:
+      build: ./mySql
+      container_name: mysql-db
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: tpch
+      ports:
+        - "3306:3306"
+      volumes:
+        - mysql:/var/lib/mysql
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+
+    nifi:
+      build: ./apacheNifi
+      container_name: apache-nifi
+      ports:
+        - "8080:8080"
+        - "8443:8443"
+      environment:
+        NIFI_WEB_HTTP_PORT: 8080
+      volumes:
+        - nifi:/opt/nifi/nifi-current/state
+      depends_on:
+        mysql:
+          condition: service_healthy
+
+  volumes:
+    mysql:
+    nifi:

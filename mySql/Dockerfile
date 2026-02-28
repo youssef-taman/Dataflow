@@ -1,7 +1,6 @@
 FROM mysql:8.0
 
-ENV MYSQL_ROOT_PASSWORD=root
-ENV MYSQL_DATABASE=tpch
+
 
 # Enable server-side    infile
 RUN printf "[mysqld]\nlocal_infile=1\n" > /etc/mysql/conf.d/local.cnf
