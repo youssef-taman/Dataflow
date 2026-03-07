@@ -11,8 +11,9 @@ RUN mkdir -p /opt/nifi/nifi-current/drivers
 RUN curl -L -o /opt/nifi/nifi-current/drivers/mysql-connector-java-8.0.19.jar \
     https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.19/mysql-connector-java-8.0.19.jar
 
-# Fix permissions so nifi user can read it
-RUN chown -R nifi:nifi /opt/nifi/nifi-current/drivers
+# Download Parquet and Hadoop NARs into lib folder
+RUN curl -L -o /opt/nifi/nifi-current/lib/nifi-parquet-nar-2.8.0.nar \
+    https://repo1.maven.org/maven2/org/apache/nifi/nifi-parquet-nar/2.8.0/nifi-parquet-nar-2.8.0.nar
 
-# Switch back to nifi user
-USER nifi
+RUN curl -L -o /opt/nifi/nifi-current/lib/nifi-hadoop-libraries-nar-2.8.0.nar \
+    https://repo1.maven.org/maven2/org/apache/nifi/nifi-hadoop-libraries-nar/2.8.0/nifi-hadoop-libraries-nar-2.8.0.nar
