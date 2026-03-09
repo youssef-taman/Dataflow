@@ -10,7 +10,7 @@
       ports:
         - "3306:3306"
       volumes:
-        - mysql:/var/lib/mysql
+        - mysql-data:/var/lib/mysql
       healthcheck:
         test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
         timeout: 20s
@@ -32,5 +32,5 @@
           condition: service_healthy
 
   volumes:
-    mysql:
+    mysql-data:
     nifi:

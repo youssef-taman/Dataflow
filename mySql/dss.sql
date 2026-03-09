@@ -1,18 +1,20 @@
 CREATE DATABASE IF NOT EXISTS tpch;
-
 USE tpch;
+
+CREATE TABLE Region (
+    r_regionkey  INTEGER NOT NULL,
+    r_name       CHAR(25) NOT NULL,
+    r_comment    VARCHAR(152),
+    PRIMARY KEY (r_regionkey)         
+);
 
 CREATE TABLE Nation (
     n_nationkey  INTEGER NOT NULL,
     n_name       CHAR(25) NOT NULL,
     n_regionkey  INTEGER NOT NULL,
-    n_comment    VARCHAR(152)
-);
-
-CREATE TABLE Region (
-    r_regionkey  INTEGER NOT NULL,
-    r_name       CHAR(25) NOT NULL,
-    r_comment    VARCHAR(152)
+    n_comment    VARCHAR(152),
+    PRIMARY KEY (n_nationkey),   
+    FOREIGN KEY (n_regionkey) REFERENCES Region(r_regionkey)
 );
 
 CREATE TABLE Part (
@@ -24,7 +26,8 @@ CREATE TABLE Part (
     p_size        INTEGER NOT NULL,
     p_container   CHAR(10) NOT NULL,
     p_retailprice DECIMAL(15,2) NOT NULL,
-    p_comment     VARCHAR(23) NOT NULL
+    p_comment     VARCHAR(23) NOT NULL,
+    PRIMARY KEY (p_partkey)          
 );
 
 CREATE TABLE Supplier (
@@ -34,7 +37,9 @@ CREATE TABLE Supplier (
     s_nationkey  INTEGER NOT NULL,
     s_phone      CHAR(15) NOT NULL,
     s_acctbal    DECIMAL(15,2) NOT NULL,
-    s_comment    VARCHAR(101) NOT NULL
+    s_comment    VARCHAR(101) NOT NULL,
+    PRIMARY KEY (s_suppkey),         
+    FOREIGN KEY (s_nationkey) REFERENCES Nation(n_nationkey)
 );
 
 CREATE TABLE Partsupp (
@@ -42,7 +47,10 @@ CREATE TABLE Partsupp (
     ps_suppkey    INTEGER NOT NULL,
     ps_availqty   INTEGER NOT NULL,
     ps_supplycost DECIMAL(15,2) NOT NULL,
-    ps_comment    VARCHAR(199) NOT NULL
+    ps_comment    VARCHAR(199) NOT NULL,
+    PRIMARY KEY (ps_partkey, ps_suppkey),
+    FOREIGN KEY (ps_partkey) REFERENCES Part(p_partkey),
+    FOREIGN KEY (ps_suppkey) REFERENCES Supplier(s_suppkey)
 );
 
 CREATE TABLE Customer (
@@ -53,7 +61,9 @@ CREATE TABLE Customer (
     c_phone      CHAR(15) NOT NULL,
     c_acctbal    DECIMAL(15,2) NOT NULL,
     c_mktsegment CHAR(10) NOT NULL,
-    c_comment    VARCHAR(117) NOT NULL
+    c_comment    VARCHAR(117) NOT NULL,
+    PRIMARY KEY (c_custkey),         
+    FOREIGN KEY (c_nationkey) REFERENCES Nation(n_nationkey)
 );
 
 CREATE TABLE Orders (
@@ -65,24 +75,30 @@ CREATE TABLE Orders (
     o_orderpriority CHAR(15) NOT NULL,
     o_clerk         CHAR(15) NOT NULL,
     o_shippriority  INTEGER NOT NULL,
-    o_comment       VARCHAR(79) NOT NULL
+    o_comment       VARCHAR(79) NOT NULL,
+    PRIMARY KEY (o_orderkey),         
+    FOREIGN KEY (o_custkey) REFERENCES Customer(c_custkey)
 );
 
 CREATE TABLE Lineitem (
-    l_orderkey     INTEGER NOT NULL,
-    l_partkey      INTEGER NOT NULL,
-    l_suppkey      INTEGER NOT NULL,
-    l_linenumber   INTEGER NOT NULL,
-    l_quantity     DECIMAL(15,2) NOT NULL,
+    l_orderkey      INTEGER NOT NULL,
+    l_partkey       INTEGER NOT NULL,
+    l_suppkey       INTEGER NOT NULL,
+    l_linenumber    INTEGER NOT NULL,
+    l_quantity      DECIMAL(15,2) NOT NULL,
     l_extendedprice DECIMAL(15,2) NOT NULL,
-    l_discount     DECIMAL(15,2) NOT NULL,
-    l_tax          DECIMAL(15,2) NOT NULL,
-    l_returnflag   CHAR(1) NOT NULL,
-    l_linestatus   CHAR(1) NOT NULL,
-    l_shipdate     DATE NOT NULL,
-    l_commitdate   DATE NOT NULL,
-    l_receiptdate  DATE NOT NULL,
-    l_shipinstruct CHAR(25) NOT NULL,
-    l_shipmode     CHAR(10) NOT NULL,
-    l_comment      VARCHAR(44) NOT NULL
+    l_discount      DECIMAL(15,2) NOT NULL,
+    l_tax           DECIMAL(15,2) NOT NULL,
+    l_returnflag    CHAR(1) NOT NULL,
+    l_linestatus    CHAR(1) NOT NULL,
+    l_shipdate      DATE NOT NULL,
+    l_commitdate    DATE NOT NULL,
+    l_receiptdate   DATE NOT NULL,
+    l_shipinstruct  CHAR(25) NOT NULL,
+    l_shipmode      CHAR(10) NOT NULL,
+    l_comment       VARCHAR(44) NOT NULL,
+    PRIMARY KEY (l_orderkey, l_linenumber),
+    FOREIGN KEY (l_orderkey) REFERENCES Orders(o_orderkey),
+    FOREIGN KEY (l_partkey)  REFERENCES Part(p_partkey),
+    FOREIGN KEY (l_suppkey)  REFERENCES Supplier(s_suppkey)
 );
